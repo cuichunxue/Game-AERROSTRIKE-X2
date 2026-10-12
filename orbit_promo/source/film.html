@@ -83,8 +83,7 @@ canvas{position:absolute;inset:0}
 
   <!-- S5 demo 1 -->
   <div class="browser" id="br" style="left:330px;top:120px;width:1500px;height:904px">
-    <div class="bar"><span class="dot" style="background:#ff6b8a"></span><span class="dot" style="background:#ffb347"></span><span class="dot" style="background:#5ce08a"></span>
-      <div class="url"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5ce08a" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>cuichunxue.github.io/Orbit_sactter</div></div>
+    <div class="bar"><span class="dot" style="background:#ff6b8a"></span><span class="dot" style="background:#ffb347"></span><span class="dot" style="background:#5ce08a"></span></div>
     <div class="view" style="width:1500px;height:860px">
       <img id="sh0" src="shots2/00_empty.png">
       <img id="sh1" src="shots2/01_pasted.png">
@@ -131,8 +130,7 @@ canvas{position:absolute;inset:0}
 
   <!-- S10 CTA -->
   <div class="L center cap" id="ct1" style="top:625px;font-size:64px"></div>
-  <div class="L center" id="url" style="top:770px"><span class="pill"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ffb347" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>cuichunxue.github.io/Orbit_sactter</span></div>
-  <div class="L center" id="bdg" style="top:920px"><span class="badge">無料</span><span class="badge">登録不要</span><span class="badge">インストール不要</span><span class="badge">データは手元に</span></div>
+  <div class="L center" id="bdg" style="top:790px"><span class="badge">無料</span><span class="badge">登録不要</span><span class="badge">インストール不要</span><span class="badge">データは手元に</span></div>
   <div class="L center" id="now" style="top:632px;font-weight:900;font-size:64px;letter-spacing:.25em;color:var(--amber)">今すぐ、ブラウザで。</div>
 
   <canvas id="fx" width="1920" height="1080"></canvas>
@@ -464,12 +462,10 @@ function render(t){
     glow(bg,CX,CY-200,900,'rgba(255,179,71,.18)',a);
     const sw=prog(t,68,69.1);if(sw<1){fx.save();fx.globalAlpha=(1-sw)*.8;fx.strokeStyle='#ffd08a';fx.lineWidth=8*(1-sw)+1;fx.beginPath();fx.arc(CX,CY-200,eOut(sw)*1300,0,7);fx.stroke();fx.restore()}
     reveal('ct1','あなたのデータは、<span class="hl">もっと語れる</span>。',t,69.6,{stagger:.045,out:73.7,outDur:.3});
-    const ua=eBack(prog(t,71,71.6));show($('url'),prog(t,71,71.3),`scale(${lerp(.7,1,ua)})`);
-    $('url').firstElementChild.style.boxShadow=`0 0 ${40+20*Math.sin(t*4)}px rgba(255,179,71,${.25+.15*Math.sin(t*4)})`;
-    const bs=$('bdg').children;[...bs].forEach((b,i)=>{const q=eOut(prog(t,72+i*.15,72.5+i*.15));b.style.opacity=q;b.style.transform=`translateY(${(1-q)*20}px)`});show($('bdg'),t>72?1:0);
+    const bs=$('bdg').children;[...bs].forEach((b,i)=>{const q=eOut(prog(t,71.2+i*.15,71.7+i*.15));b.style.opacity=q;b.style.transform=`translateY(${(1-q)*20}px)`});show($('bdg'),t>71.2?1:0);
     reveal('now','今すぐ、ブラウザで。',t,74.0,{stagger:.06,dy:0,blur:16});
     if(t>74){glow(fx,CX,680,700,'rgba(255,179,71,.25)',(1-prog(t,74,76))*.8)}
-  } else {['ct1','url','bdg','now'].forEach(id=>{$(id).style.display='none'})}
+  } else {['ct1','bdg','now'].forEach(id=>{$(id).style.display='none'})}
 
   // global hide out-of-scene DOM for speed
   if(!(t>=8&&t<17.2))['p1','p2','p3','p4'].forEach(id=>$(id).style.display='none');
