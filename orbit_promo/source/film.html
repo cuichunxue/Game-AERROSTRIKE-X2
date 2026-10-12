@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<title>Orbit Promo Film</title>
+<link rel="stylesheet" href="node_modules/@fontsource/noto-sans-jp/300.css">
+<link rel="stylesheet" href="node_modules/@fontsource/noto-sans-jp/500.css">
+<link rel="stylesheet" href="node_modules/@fontsource/noto-sans-jp/700.css">
+<link rel="stylesheet" href="node_modules/@fontsource/noto-sans-jp/900.css">
+<link rel="stylesheet" href="node_modules/@fontsource/sora/600.css">
+<link rel="stylesheet" href="node_modules/@fontsource/sora/700.css">
+<link rel="stylesheet" href="node_modules/@fontsource/spline-sans-mono/400.css">
+<link rel="stylesheet" href="node_modules/@fontsource/spline-sans-mono/600.css">
+<style>
+:root{--bg:#07090e;--ink:#eef2fb;--ink2:#aab4cc;--ink3:#6b7894;--amber:#ffb347;--cyan:#5ce0d8;--violet:#a78bfa;--rose:#ff6b8a;--line:#28324a}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
+canvas{position:absolute;inset:0}
+.L{position:absolute;will-change:transform,opacity}
+.center{left:0;right:0;text-align:center}
+.mono{font-family:'Spline Sans Mono',monospace}
+.sora{font-family:'Sora','Noto Sans JP',sans-serif}
+.ch{display:inline-block;white-space:pre}
+.hl{color:var(--amber)}
+.cy{color:var(--cyan)}
+.thought{text-shadow:0 0 18px #07090e,0 0 36px #07090e;font-weight:500;font-size:46px;letter-spacing:.02em;color:#d8deea;white-space:nowrap}
+.cap{font-weight:700;font-size:62px;letter-spacing:.01em;line-height:1.25}
+.sub{font-weight:300;font-size:30px;color:var(--ink2);letter-spacing:.06em}
+.browser{position:absolute;border-radius:18px;overflow:hidden;background:#0b0e14;border:1px solid #2a3450;box-shadow:0 60px 140px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.03) inset}
+.browser .bar{height:44px;background:#121722;display:flex;align-items:center;gap:9px;padding:0 18px;border-bottom:1px solid #1e2738}
+.browser .dot{width:12px;height:12px;border-radius:50%}
+.browser .url{margin-left:18px;flex:1;max-width:720px;height:28px;border-radius:8px;background:#0b0e14;border:1px solid #232c40;color:#8f9bb6;font:400 15px 'Spline Sans Mono',monospace;display:flex;align-items:center;padding:0 14px;gap:8px}
+.browser .view{position:relative;overflow:hidden}
+.browser img{position:absolute;left:0;top:0;width:100%;display:block}
+.step{z-index:20;background:rgba(10,13,20,.88);border:1px solid #2a3450;border-radius:18px;padding:22px 30px;box-shadow:0 30px 60px rgba(0,0,0,.6);display:flex;align-items:center;gap:20px;font-weight:700;font-size:40px;white-space:nowrap}
+.step .n{font:600 22px 'Spline Sans Mono',monospace;color:#1a1206;background:var(--amber);border-radius:10px;padding:6px 12px}
+.key{display:inline-flex;align-items:center;justify-content:center;min-width:92px;height:92px;padding:0 22px;border-radius:18px;background:linear-gradient(#2a3346,#1a2030);border:1px solid #3a4560;box-shadow:0 8px 0 #0e121b,0 18px 40px rgba(0,0,0,.5);font:600 40px 'Sora',sans-serif;color:#fff}
+.card{position:absolute;border-radius:16px;overflow:hidden;border:1px solid #28324a;background:#141925;box-shadow:0 40px 90px rgba(0,0,0,.6)}
+.card img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block}
+.card .tag{position:absolute;left:14px;bottom:14px;background:rgba(7,9,14,.82);border:1px solid #2a3450;border-radius:10px;padding:6px 14px;font-weight:700;font-size:22px}
+.callout{position:absolute;font-weight:700;font-size:26px;white-space:nowrap;padding:8px 16px;border-radius:10px;background:rgba(7,9,14,.85);border:1px solid}
+.tile{position:absolute;width:780px;height:300px;border-radius:26px;background:linear-gradient(160deg,rgba(27,34,48,.92),rgba(14,18,27,.92));border:1px solid #2a3450;padding:46px 50px;display:flex;gap:38px;align-items:center;box-shadow:0 40px 100px rgba(0,0,0,.55)}
+.tile .ic{width:120px;height:120px;border-radius:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tile .t1{font-weight:900;font-size:54px;letter-spacing:.01em;white-space:nowrap}
+.tile .t2{font-weight:300;font-size:26px;color:var(--ink2);margin-top:10px;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:18px;padding:22px 40px;border-radius:999px;background:rgba(255,179,71,.08);border:2px solid var(--amber);font:600 40px 'Spline Sans Mono',monospace;color:#fff;white-space:nowrap}
+.badge{display:inline-block;padding:10px 26px;border-radius:999px;border:1px solid #34405e;background:#121722;font-weight:500;font-size:28px;color:var(--ink2);margin:0 8px}
+.quote{font-weight:700;font-size:58px;white-space:nowrap}
+.vign{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.65) 100%)}
+.grain{position:absolute;inset:-50%;pointer-events:none;opacity:.05}
+.bars{position:absolute;left:0;right:0;height:0;background:#000;z-index:50}
+</style></head>
+<body>
+<div id="stage">
+  <canvas id="bg" width="1920" height="1080"></canvas>
+
+  <!-- S1 hook -->
+  <div class="L center mono" id="clock" style="top:300px;font-size:150px;font-weight:600;letter-spacing:.04em;color:#e9edf6"></div>
+  <div class="L center" id="clockSub" style="top:270px;font:400 22px 'Spline Sans Mono';letter-spacing:.5em;color:var(--ink3)">MON · NIGHT</div>
+  <div class="L center cap" id="h1" style="top:560px"></div>
+  <div class="L center sub" id="h2" style="top:660px"></div>
+
+  <!-- S2 pain -->
+  <div class="L thought" id="p1" style="left:180px;top:200px"></div>
+  <div class="L thought" id="p2" style="left:140px;top:430px"></div>
+  <div class="L thought" id="p3" style="left:260px;top:640px"></div>
+  <div class="L thought" id="p4" style="left:700px;top:850px"></div>
+
+  <!-- S3 build -->
+  <div class="L center cap" id="b1" style="top:430px;font-weight:500"></div>
+  <div class="L center cap" id="b2" style="top:530px;font-weight:900"></div>
+
+  <!-- S4 logo -->
+  <div class="L center" id="logo" style="top:300px">
+    <svg id="logoMark" width="260" height="260" viewBox="0 0 24 24" fill="none" style="overflow:visible">
+      <circle id="lm1" cx="7" cy="15" r="3" fill="#5ce0d8"/>
+      <circle id="lm2" cx="15" cy="9" r="4.2" fill="#ffb347"/>
+      <circle id="lm3" cx="18.5" cy="17" r="2" fill="#a78bfa"/>
+    </svg>
+  </div>
+  <div class="L center sora" id="word" style="top:560px;font-size:168px;font-weight:700;letter-spacing:-.03em;line-height:1">Or<span class="hl">b</span>it</div>
+  <div class="L center sora" id="studio" style="top:748px;font-size:28px;font-weight:600;letter-spacing:.7em;color:var(--ink2)">BUBBLE STUDIO</div>
+  <div class="L center" id="tag" style="top:830px;font-weight:700;font-size:50px"></div>
+
+  <!-- S5 demo 1 -->
+  <div class="browser" id="br" style="left:330px;top:120px;width:1500px;height:904px">
+    <div class="bar"><span class="dot" style="background:#ff6b8a"></span><span class="dot" style="background:#ffb347"></span><span class="dot" style="background:#5ce08a"></span>
+      <div class="url"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5ce08a" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>cuichunxue.github.io/Orbit_sactter</div></div>
+    <div class="view" style="width:1500px;height:860px">
+      <img id="sh0" src="shots2/00_empty.png">
+      <img id="sh1" src="shots2/01_pasted.png">
+      <img id="sh2" src="shots2/04_scatter_full.png">
+      <div id="ripple" style="position:absolute;border-radius:50%;border:3px solid var(--amber);pointer-events:none"></div>
+      <svg id="cursor" width="40" height="40" viewBox="0 0 24 24" style="position:absolute;left:0;top:0;filter:drop-shadow(0 4px 8px rgba(0,0,0,.6))"><path d="M4 2l15 10-7 1.5L8.5 21z" fill="#fff" stroke="#111" stroke-width="1.2" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+  <div class="L" id="keys" style="left:0;top:0"><span class="key">Ctrl</span> <span style="font:600 50px Sora;color:#6b7894;margin:0 14px">+</span> <span class="key">V</span></div>
+  <div class="L step" id="st1" style="left:90px;top:300px"><span class="n">01</span>Excelから<br>コピペ</div>
+  <div class="L step" id="st2" style="left:90px;top:300px"><span class="n">02</span>クリック<br>ひとつ</div>
+  <div class="L step" id="st3" style="left:90px;top:300px"><span class="n">03</span>一瞬で<br>バブルチャート</div>
+
+  <!-- S6 demo 2 -->
+  <div class="card" id="reg" style="left:0;top:0;width:1076px;height:688px"><img src="shots2/07_quadrant.png" style="object-fit:contain"></div>
+  <div class="callout" id="c1" style="color:#ff6b8a;border-color:#ff6b8a">線形回帰</div>
+  <div class="callout" id="c2" style="color:#5ce0d8;border-color:#5ce0d8">95% 信頼区間</div>
+  <div class="callout" id="c3" style="color:#ff9fb4;border-color:#ff9fb4">95% 予測区間</div>
+  <div class="callout" id="c4" style="color:#ffb347;border-color:#ffb347">平均クロス ＝ 4象限</div>
+  <div class="L cap" id="d2t" style="left:100px;top:170px;font-size:64px;line-height:1.35"></div>
+  <div class="L" id="code" style="left:100px;top:520px;font:400 24px 'Spline Sans Mono';color:#aab4cc;white-space:nowrap;line-height:1.7">
+    <span id="codeTxt" style="display:inline-block">import statsmodels.api as sm<br>model = sm.OLS(y, X).fit()</span>
+    <div id="strike" style="position:absolute;left:-6px;top:50%;height:4px;background:var(--rose);border-radius:2px"></div>
+  </div>
+  <div class="L" id="noCode" style="left:100px;top:660px;font-weight:900;font-size:58px;white-space:nowrap;line-height:1.3">R も Python も、<br><span class="hl">いらない。</span></div>
+
+  <!-- S7 montage -->
+  <div class="L center cap" id="m1" style="top:70px">1つのデータから、<span class="cy">7つの視点</span>。</div>
+  <div id="cards"></div>
+
+  <!-- S8 values -->
+  <div class="tile" id="v1"><div class="ic" style="background:rgba(92,224,216,.12)"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#5ce0d8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8M12 18v3"/></svg></div><div><div class="t1">インストール不要</div><div class="t2">URLを開くだけ。社用PCでもOK</div></div></div>
+  <div class="tile" id="v2"><div class="ic" style="background:rgba(255,179,71,.12)"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ffb347" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><div><div class="t1">データは外に出ない</div><div class="t2">処理はすべてブラウザの中で完結</div></div></div>
+  <div class="tile" id="v3"><div class="ic" style="background:rgba(167,139,250,.14)"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg></div><div><div class="t1">PNG・SVG・CSV</div><div class="t2">そのまま資料へ、書き出し一発</div></div></div>
+  <div class="tile" id="v4"><div class="ic" style="background:rgba(255,107,138,.13)"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ff6b8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-9.2-9C1.4 8.8 3.4 5 7 5c2 0 3.5 1.2 5 3 1.5-1.8 3-3 5-3 3.6 0 5.6 3.8 4.2 7-2.2 4.6-9.2 9-9.2 9z"/></svg></div><div><div class="t1">無料・登録不要</div><div class="t2">今日から、誰でも、すぐに</div></div></div>
+
+  <!-- S9 emotional -->
+  <div class="L center mono" id="am" style="top:380px;font-size:150px;font-weight:600;color:#fff"></div>
+  <div class="L center" id="amSub" style="top:590px;font-weight:300;font-size:40px;letter-spacing:.2em;color:var(--ink2)">翌朝、会議室。</div>
+  <div class="L" id="screen" style="left:460px;top:120px;width:1000px;height:640px;border-radius:14px;overflow:hidden;border:10px solid #161b26;box-shadow:0 0 160px rgba(92,224,216,.18),0 40px 120px rgba(0,0,0,.8)"><img src="shots2/07_quadrant.png" style="width:100%;height:100%;object-fit:cover;object-position:top left"></div>
+  <canvas id="crowd" width="1920" height="1080"></canvas>
+  <div class="L center quote" id="q1" style="top:800px"></div>
+  <div class="L center cap" id="e3" style="top:470px;font-size:76px;font-weight:900"></div>
+
+  <!-- S10 CTA -->
+  <div class="L center cap" id="ct1" style="top:625px;font-size:64px"></div>
+  <div class="L center" id="url" style="top:770px"><span class="pill"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ffb347" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>cuichunxue.github.io/Orbit_sactter</span></div>
+  <div class="L center" id="bdg" style="top:920px"><span class="badge">無料</span><span class="badge">登録不要</span><span class="badge">インストール不要</span><span class="badge">データは手元に</span></div>
+  <div class="L center" id="now" style="top:632px;font-weight:900;font-size:64px;letter-spacing:.25em;color:var(--amber)">今すぐ、ブラウザで。</div>
+
+  <canvas id="fx" width="1920" height="1080"></canvas>
+  <div class="vign"></div>
+  <div id="flash" style="position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
+  <div id="fade" style="position:absolute;inset:0;background:#000;opacity:0;pointer-events:none"></div>
+</div>
+
+<script>
+// ============================================================ utils
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+const eOut=x=>1-Math.pow(1-x,3);
+const eIn=x=>x*x*x;
+const eIO=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const eBack=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const eExpo=x=>x===1?1:1-Math.pow(2,-10*x);
+// window envelope: fade in over [a,a+fi], out over [b-fo,b]
+const win=(t,a,b,fi=.4,fo=.4)=>Math.min(prog(t,a,a+fi),1-prog(t,b-fo,b));
+function rnd(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function show(el,o,tf='',filter=''){el.style.opacity=o;el.style.display=o<=0.001?'none':'';el.style.transform=tf;el.style.filter=filter}
+
+// per-character reveal (split once)
+function split(id,html){const el=$(id);if(el.dataset.s)return el;el.dataset.s=1;
+  const tmp=document.createElement('div');tmp.innerHTML=html;el.innerHTML='';
+  const walk=(node,parent)=>{for(const n of [...node.childNodes]){if(n.nodeType===3){for(const c of n.textContent){const s=document.createElement('span');s.className='ch';s.textContent=c;parent.appendChild(s)}}else{const cl=n.cloneNode(false);parent.appendChild(cl);walk(n,cl)}}};
+  walk(tmp,el);return el}
+function reveal(id,html,t,t0,{stagger=.035,dur=.5,out=1e9,outDur=.4,dy=24,blur=10}={}){
+  const el=split(id,html);const chs=el.querySelectorAll('.ch');
+  const o=1-prog(t,out,out+outDur);
+  el.style.display=(t<t0-.01||o<=0)?'none':'';el.style.opacity=o;
+  chs.forEach((c,i)=>{const p=eOut(prog(t,t0+i*stagger,t0+i*stagger+dur));
+    c.style.opacity=p;c.style.transform=`translateY(${(1-p)*dy}px)`;c.style.filter=p<1?`blur(${(1-p)*blur}px)`:''});
+  return el}
+
+// ============================================================ data
+const CITY=[[2.9,13.96,68,'東京'],[1.8,24.28,152,'上海'],[1.6,26.32,168,'デリー'],[1.5,8.42,44,'ニューヨーク'],[1.2,10.98,38,'ロンドン'],[0.95,12.45,52,'パリ'],[0.88,21.78,128,'サンパウロ'],[0.72,9.62,41,'シカゴ'],[0.68,13.93,108,'カイロ'],[0.64,15.62,98,'ラゴス'],[0.58,9.51,39,'モスクワ'],[0.45,5.31,22,'シンガポール'],[0.42,5.18,19,'シドニー'],[0.38,12.10,85,'ブエノスアイレス'],[0.35,9.98,47,'バンコク']];
+const COLS=['GDP_Trillion','Population_M','CO2_Mt','City','Region'];
+const REG=['アジア','アジア','アジア','北米','ヨーロッパ','ヨーロッパ','南米','北米','アフリカ','アフリカ','ヨーロッパ','アジア','オセアニア','南米','アジア'];
+const PAL=['#5ce0d8','#ffb347','#a78bfa','#ff6b8a','#5ce08a','#6aa8ff'];
+
+// spreadsheet cells
+const CW=170,CH=46,GX=-40,GY=-10;
+const cells=[];
+for(let r=0;r<24;r++)for(let c=0;c<12;c++){
+  let txt='';const rr=(r-2+24)%16, cc=c%5;
+  if(r===1)txt=COLS[cc];else if(r>1){const row=CITY[rr%15];txt=cc<3?String(row[cc]):cc===3?row[3]:REG[rr%15]}
+  cells.push({r,c,txt,x:GX+c*CW+12,y:GY+r*CH+30})}
+
+// particles
+const R=rnd(42);const P=[];
+for(let i=0;i<900;i++){
+  const ring=i%3; const col=['#5ce0d8','#ffb347','#a78bfa'][ring];
+  P.push({ang:R()*Math.PI*2,spd:(.15+R()*.35)*(R()<.5?1:-1)*0.6+0.25,ring,col,
+    rad:[300,430,560][ring]*(0.85+R()*0.3),tilt:[0.32,0.42,0.26][ring],rot:[-.25,.18,.05][ring],
+    sz:.8+R()*2.6,ex:(R()-.5)*2600,ey:(R()-.5)*1600,z:R(),
+    sx:cells[i%cells.length].x+40+R()*60,sy:cells[i%cells.length].y-8,tw:R()*6.28})}
+
+// ============================================================ canvas BG
+const bg=$('bg').getContext('2d'), fx=$('fx').getContext('2d'), cr=$('crowd').getContext('2d');
+const W=1920,H=1080,CX=W/2,CY=H/2;
+
+function drawGrid(t,alpha,shake,collapse){
+  if(alpha<=0)return;
+  bg.save();bg.globalAlpha=alpha;
+  const drift=t*6;
+  bg.translate(-drift*0.6,-drift*0.3);
+  bg.strokeStyle='rgba(120,135,165,.10)';bg.lineWidth=1;
+  if(collapse<=0){
+    for(let c=0;c<=13;c++){bg.beginPath();bg.moveTo(GX+c*CW,0);bg.lineTo(GX+c*CW,H+200);bg.stroke()}
+    for(let r=0;r<=26;r++){bg.beginPath();bg.moveTo(0,GY+r*CH);bg.lineTo(W+200,GY+r*CH);bg.stroke()}
+  }
+  bg.font='400 20px "Spline Sans Mono","Noto Sans JP"';
+  const k=eIn(clamp(collapse));
+  cells.forEach((c,i)=>{if(!c.txt)return;
+    let x=c.x,y=c.y;
+    if(shake>0){const j=Math.sin(i*12.9898+Math.floor(t*14)*78.233)*43758.5453;x+=(j-Math.floor(j)-.5)*shake;y+=((j*7)%1-.5)*shake*.6}
+    if(k>0){x=lerp(x,CX+drift*.6,k);y=lerp(y,CY+drift*.3,k)}
+    const hdr=c.r===1;
+    bg.fillStyle=hdr?'rgba(255,179,71,.55)':'rgba(170,180,204,.42)';
+    bg.globalAlpha=alpha*(1-k*0.9);
+    bg.fillText(c.txt,x,y)});
+  bg.restore()}
+
+function drawUglyChart(t,a){
+  if(a<=0)return;
+  bg.save();bg.globalAlpha=a;
+  const x0=1230,y0=150,w=560,h=340;
+  bg.fillStyle='#e9e9e9';bg.fillRect(x0,y0,w,h);
+  bg.fillStyle='#000';bg.font='16px "Noto Sans JP"';bg.fillText('グラフ タイトル',x0+w/2-60,y0+30);
+  bg.strokeStyle='#bbb';for(let i=0;i<6;i++){bg.beginPath();bg.moveTo(x0+50,y0+60+i*55);bg.lineTo(x0+w-20,y0+60+i*55);bg.stroke()}
+  CITY.forEach((r,i)=>{const bh=r[0]/3*240*(0.9+0.1*Math.sin(t*20+i));bg.fillStyle=i%2?'#4472c4':'#ed7d31';bg.fillRect(x0+60+i*32,y0+305-bh,20,bh)});
+  bg.fillStyle='#4472c4';bg.fillRect(x0+w-150,y0+50,12,12);bg.fillStyle='#000';bg.fillText('系列1',x0+w-132,y0+61);
+  bg.restore()}
+
+function drawOrbits(t,a,t0,{burst=true,cx=CX,cy=CY,scale=1}={}){
+  if(a<=0)return;
+  const dt=t-t0;
+  bg.save();bg.globalCompositeOperation='lighter';
+  // orbit rings
+  for(let ring=0;ring<3;ring++){
+    const rr=[300,430,560][ring]*scale, tl=[0.32,0.42,0.26][ring], ro=[-.25,.18,.05][ring]+dt*0.01*(ring-1);
+    const p=eOut(prog(dt,0.1+ring*.12,1.4+ring*.12));
+    bg.save();bg.translate(cx,cy);bg.rotate(ro);bg.scale(1,tl);
+    bg.globalAlpha=a*0.35*p;bg.strokeStyle=['#5ce0d8','#ffb347','#a78bfa'][ring];bg.lineWidth=1.4/tl*0.7;
+    bg.beginPath();bg.arc(0,0,rr*p,0,Math.PI*2);bg.stroke();bg.restore()}
+  P.forEach((q,i)=>{
+    const ang=q.ang+dt*q.spd;
+    let ox=Math.cos(ang)*q.rad*scale, oy=Math.sin(ang)*q.rad*scale*q.tilt;
+    const cr_=Math.cos(q.rot),sr=Math.sin(q.rot);
+    let x=cx+ox*cr_-oy*sr, y=cy+ox*sr+oy*cr_;
+    if(burst){const b=eExpo(prog(dt,0,1.6));const ex=cx+q.ex*(1-b*0.0),ey=cy+q.ey;
+      // from center explode to far, then settle into orbit
+      const e1=eOut(prog(dt,0,.35)); const s1=eIO(prog(dt,.25,1.9));
+      const bx=lerp(cx,cx+q.ex*.55,e1), by=lerp(cy,cy+q.ey*.55,e1);
+      x=lerp(bx,x,s1);y=lerp(by,y,s1)}
+    const front=Math.sin(ang)>0;
+    const tw=.6+.4*Math.sin(t*3+q.tw);
+    bg.globalAlpha=a*tw*(front?1:.45);
+    bg.fillStyle=q.col;
+    const s=q.sz*(front?1.2:.8)*scale;
+    bg.beginPath();bg.arc(x,y,s,0,Math.PI*2);bg.fill()});
+  bg.restore()}
+
+function glow(ctx,x,y,r,col,a){if(a<=0)return;const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');ctx.save();ctx.globalAlpha=a;ctx.globalCompositeOperation='lighter';ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2);ctx.restore()}
+
+function drawStars(t,a){if(a<=0)return;const r=rnd(9);bg.save();for(let i=0;i<220;i++){const x=r()*W,y=r()*H,s=r()*1.4+.3,tw=.4+.6*Math.abs(Math.sin(t*.8+i));bg.globalAlpha=a*tw*.6;bg.fillStyle=i%7?'#9fb0d0':'#ffb347';bg.fillRect(x+Math.sin(t*.05+i)*8,y,s,s)}bg.restore()}
+
+// bubbles that float (data bubbles) for values/CTA backgrounds
+function drawBubbles(t,a,seed=3,n=26){if(a<=0)return;const r=rnd(seed);bg.save();bg.globalCompositeOperation='lighter';
+  for(let i=0;i<n;i++){const col=PAL[i%PAL.length];const bx=r()*W,by=r()*H,rad=20+r()*90,sp=10+r()*30;
+    const y=((by-t*sp)%(H+300)+H+300)%(H+300)-150;const x=bx+Math.sin(t*.4+i)*40;
+    const g=bg.createRadialGradient(x-rad*.3,y-rad*.3,rad*.1,x,y,rad);g.addColorStop(0,col+'55');g.addColorStop(1,col+'00');
+    bg.globalAlpha=a*.55;bg.fillStyle=g;bg.beginPath();bg.arc(x,y,rad,0,Math.PI*2);bg.fill();
+    bg.globalAlpha=a*.25;bg.strokeStyle=col;bg.lineWidth=1.2;bg.stroke()}bg.restore()}
+
+// ============================================================ montage cards
+const CARDS=[['02_bar','棒グラフ'],['03_pie','円グラフ'],['05_labels','散布図・バブル'],['08_box','箱ひげ図'],['09_treemap','ツリーマップ'],['10_hist','ヒストグラム'],['11_pareto','パレート図']];
+CARDS.forEach(([f,l],i)=>{const d=document.createElement('div');d.className='card';d.id='k'+i;d.style.width='560px';d.style.height='350px';d.innerHTML=`<img src="shots2/${f}.png"><div class="tag">${l}</div>`;$('cards').appendChild(d)});
+
+// ============================================================ RENDER
+function render(t){
+  bg.setTransform(1,0,0,1,0,0);bg.clearRect(0,0,W,H);
+  fx.clearRect(0,0,W,H);cr.clearRect(0,0,W,H);
+  bg.fillStyle='#07090e';bg.fillRect(0,0,W,H);
+
+  // ---------- S1 HOOK 0-8
+  const s1=win(t,0,8,1.2,.5);
+  drawGrid(t, (prog(t,1,4)*0.32)*(t<8?1:0) + (t>=8&&t<17.2?0.75:0), t>=8&&t<16?2+prog(t,8,16)*7:0, prog(t,16,17.2));
+  glow(bg,CX,400,700,'rgba(255,179,71,0.10)',s1);
+  {const sec=52+Math.floor(t); const mm=47+Math.floor(sec/60), ss=sec%60;
+   const colon=(t%1)<.5?':':'<span style="opacity:.25">:</span>';
+   $('clock').innerHTML=`23${colon}${String(mm).padStart(2,'0')}<span style="font-size:70px;color:#6b7894">${colon}${String(ss).padStart(2,'0')}</span>`;
+   show($('clock'),win(t,.4,7.9,1,.5)*(1),`translateY(${(1-eOut(prog(t,.4,1.6)))*20}px) scale(${1+t*0.004})`);
+   show($('clockSub'),win(t,.8,7.9,1,.5)*.9)}
+  reveal('h1','明日の会議まで、あと<span class="hl">9時間</span>。',t,2.0,{out:7.5});
+  reveal('h2','資料のグラフは、まだ真っ白なまま。',t,4.6,{stagger:.03,out:7.5,dy:12});
+
+  // ---------- S2 PAIN 8-16
+  drawUglyChart(t, win(t,8.3,16.2,.4,.6)*0.9);
+  const lines=[['p1','このグラフで、本当に<span class="hl">伝わる</span>？',8],['p2','回帰線？ 信頼区間？ ……どうやるの？',10],['p3','Pythonを覚える時間なんて、<span class="hl">ない</span>。',12],['p4','会社のPCには、ソフトも入れられない。',14]];
+  lines.forEach(([id,h,t0])=>{const el=reveal(id,h,t,t0,{stagger:.022,dur:.3,out:16.2,outDur:.8,dy:0,blur:0});
+    const g=prog(t,t0,t0+.25); const age=t-t0;
+    const dim=age>1.9?0.38:1;
+    const k=eIn(prog(t,16,17.1));
+    const r=el.getBoundingClientRect?0:0;
+    el.style.opacity=(t<t0?0:1)*dim*(1-prog(t,16.4,17.1));
+    const jx=g<1?(Math.sin(t*90)*14*(1-g)):0;
+    el.style.textShadow=g<1?`${-6*(1-g)}px 0 rgba(255,60,90,.8),${6*(1-g)}px 0 rgba(60,220,255,.8)`:'none';
+    el.style.transform=`translate(${jx}px,0) scale(${1-k*.6})`;el.style.filter=k>0?`blur(${k*8}px)`:'';});
+  // red noise flicker on pain cut
+  [8,10,12,14].forEach(t0=>{const g=1-prog(t,t0,t0+.18);if(g>0&&t>=t0){fx.save();fx.globalAlpha=g*.22;for(let i=0;i<14;i++){const r=rnd(t0*100+i);fx.fillStyle=r()<.5?'#ff3b5c':'#3be0ff';fx.fillRect(0,r()*H,W,2+r()*16)}fx.restore()}});
+
+  // ---------- S3 BUILD 16-20
+  reveal('b1','データはある。伝えたいことも、ある。',t,16.7,{stagger:.04,out:18.0,outDur:.35});
+  reveal('b2','足りなかったのは——',t,18.2,{stagger:.07,dur:.4,out:19.45,outDur:.05,dy:0,blur:14});
+  {const a=win(t,16.9,19.5,.4,.05);const pulse=1+0.5*Math.sin((t-17)*Math.PI*2*(1+prog(t,17,19.5)*3));
+   glow(bg,CX,CY,60+40*pulse*prog(t,18.8,19.5),'rgba(255,179,71,0.9)',a*.7);
+   bg.save();bg.globalAlpha=a;bg.fillStyle='#ffb347';bg.beginPath();bg.arc(CX,CY,4+3*pulse,0,7);bg.fill();bg.restore()}
+  // silence frame 19.5-20 : pure black except dot
+  if(t>=19.5&&t<20){bg.fillStyle='#000';bg.fillRect(0,0,W,H);const p=prog(t,19.5,20);bg.fillStyle='#ffb347';bg.globalAlpha=1;bg.beginPath();bg.arc(CX,CY,2+p*6,0,7);bg.fill()}
+
+  // ---------- S4 DROP & LOGO 20-28
+  const s4=win(t,20,27.6,.01,.6);
+  if(t>=20&&t<28){
+    drawStars(t,s4);
+    drawOrbits(t,s4,20,{cy:CY-20});
+    glow(bg,CX,CY-20,900*eOut(prog(t,20,20.8)),'rgba(255,179,71,.35)',s4*(1-prog(t,20,22))*1.2+.25*s4);
+    // shockwave
+    const sw=prog(t,20,21.2);if(sw<1){fx.save();fx.globalAlpha=(1-sw)*.9;fx.strokeStyle='#ffd08a';fx.lineWidth=10*(1-sw)+1;fx.beginPath();fx.arc(CX,CY,eOut(sw)*1300,0,7);fx.stroke();fx.restore()}
+  }
+  $('flash').style.opacity=(t>=20&&t<20.6?(1-prog(t,20,20.6))*.9:0)+(t>=68&&t<68.5?(1-prog(t,68,68.5))*.8:0)+(t>=74&&t<74.5?(1-prog(t,74,74.5))*.5:0);
+  // logo (S4 + S10 share)
+  {let a=0,sc=1,ty=0;
+   if(t>=20&&t<28){a=win(t,20.2,27.6,.01,.6);const p=prog(t,20.2,21.2);sc=lerp(.2,1,eBack(p))*(1+(t-21)*.006);}
+   if(t>=68){a=win(t,68.05,79,.01,.1);const p=prog(t,68.05,69);sc=lerp(.2,.5,eBack(p));ty=-200;}
+   show($('logo'),a,`translateY(${ty}px) scale(${sc}) rotate(${(1-clamp(sc))*-40}deg)`);
+   // circles orbit a bit
+   const w=t*1.2;$('lm1').setAttribute('cx',7+Math.cos(w)*.5);$('lm3').setAttribute('cy',17+Math.sin(w*1.3)*.5);
+   let wa=0,wt='';if(t<28){wa=win(t,20.9,27.6,.5,.6);const p=eOut(prog(t,20.9,21.8));wt=`translateY(${(1-p)*60}px)`;wa*=1;}
+   if(t>=68){wa=win(t,68.4,79,.5,.1);const p=eOut(prog(t,68.4,69.2));wt=`translateY(${-215+(1-p)*40}px) scale(.68)`}
+   show($('word'),wa,wt,`blur(${(1-clamp(wa))*12}px)`);
+   let sa=t<28?win(t,21.6,27.6,.6,.6):win(t,69,79,.6,.1);
+   show($('studio'),sa,`translateY(${t>=68?-246:0}px)`+` scale(${t>=68?.8:1})`,'');
+   $('studio').style.letterSpacing=(t<28?lerp(1.2,.7,eOut(prog(t,21.6,23))):lerp(1.1,.7,eOut(prog(t,69,70.5))))+'em';
+  }
+  reveal('tag','貼り付けた瞬間、データが<span class="hl">軌道に乗る</span>。',t,23.4,{stagger:.045,out:27.3});
+
+  // ---------- S5 DEMO 1 : 28-36
+  {const a=win(t,27.7,35.6,.6,.5);
+   const p=eOut(prog(t,27.7,29.4));
+   const ry=lerp(28,-8,p)+Math.sin(t*.5)*1.2, rx=lerp(14,4,p), z=lerp(-600,0,p);
+   const zoom=t>32.6?lerp(1,1.07,eIO(prog(t,32.6,35.6))):1;
+   show($('br'),a,`perspective(2400px) translateZ(${z}px) rotateY(${ry}deg) rotateX(${rx}deg) scale(${zoom*0.98})`);
+   if(a>0){
+     $('sh0').style.opacity=1;
+     $('sh1').style.opacity=eOut(prog(t,29.7,29.95));
+     $('sh2').style.opacity=eOut(prog(t,32.15,32.45));
+     $('sh2').style.transform=`scale(${lerp(1.03,1,eOut(prog(t,32.15,33)))})`;$('sh2').style.transformOrigin='70% 40%';
+     $('sh2').style.filter=`brightness(${1+0.6*(1-prog(t,32.15,32.8))})`;
+     // cursor path: to textarea, then button
+     const pts=[[1100,700,28],[1100,700,28.8],[200,420,29.5],[200,420,30.6],[202,534,31.4],[202,534,32.0],[230,540,32.4],[880,420,33.6],[905,330,35.6]];
+     let cx=pts[0][0],cy=pts[0][1];for(let i=1;i<pts.length;i++){const [x0,y0,t0]=pts[i-1],[x1,y1,t1]=pts[i];if(t>=t0){const q=eIO(prog(t,t0,t1));cx=lerp(x0,x1,q);cy=lerp(y0,y1,q)}}
+     const press=(t>31.75&&t<31.95)?.85:1;
+     $('cursor').style.transform=`translate(${cx}px,${cy}px) scale(${press})`;
+     const rp=prog(t,31.8,32.6);$('ripple').style.opacity=rp>0&&rp<1?(1-rp):0;const rs=20+rp*260;
+     Object.assign($('ripple').style,{left:(202-rs/2)+'px',top:(534-rs/2)+'px',width:rs+'px',height:rs+'px'});
+   }
+   const ka=win(t,29.2,30.6,.25,.35); const kp=eBack(prog(t,29.2,29.6));
+   const kd=(t>29.55&&t<29.75)?6:0;
+   show($('keys'),ka,`translate(${1060}px,${560+kd}px) scale(${lerp(.6,1,kp)})`);
+   [['st1',28.6,31.0],['st2',31.1,32.4],['st3',32.5,35.6]].forEach(([id,a0,a1])=>{const w_=win(t,a0,a1,.35,.3);const q=eOut(prog(t,a0,a0+.5));show($(id),w_,`translate(${(1-q)*-60}px,${560}px)`)});
+   if(a>0)glow(bg,1100,560,900,'rgba(92,224,216,.10)',a);
+   drawStars(t,a*.6);
+  }
+
+  // ---------- S6 DEMO 2 : 36-44
+  {const a=win(t,35.8,43.6,.5,.5);
+   if(a>0){drawStars(t,a*.5);glow(bg,1200,560,900,'rgba(255,107,138,.10)',a)}
+   const p=eIO(prog(t,35.8,43.6));
+   // card positioned at right, push in
+   const s=lerp(1.08,1.2,p), x=lerp(720,640,p), y=lerp(200,150,p);
+   show($('reg'),a,`translate(${x}px,${y}px) scale(${s}) perspective(2000px) rotateY(${lerp(-10,0,eOut(prog(t,35.8,37.5)))}deg)`);
+   $('reg').style.transformOrigin='0 0';
+   // callouts mapped from card coords (1076x688 card) -> screen
+   const map=(cx_,cy_)=>[x+cx_*s, y+cy_*s];
+   const C=[['c1',840,262,37.2,-170,-120],['c2',700,355,38.0,-60,140],['c3',300,490,38.8,-300,40],['c4',555,180,39.6,-80,-150]];
+   C.forEach(([id,px,py,t0,dx,dy])=>{const w_=win(t,t0,43.4,.4,.4);const [sx,sy]=map(px,py);const q=eBack(prog(t,t0,t0+.5));
+     const el=$(id);show(el,w_,`translate(${sx+dx}px,${sy+dy}px) scale(${lerp(.6,1,q)})`);
+     if(w_>0){fx.save();fx.globalAlpha=w_;fx.strokeStyle=getComputedStyle(el).color;fx.lineWidth=2.5;fx.setLineDash([]);
+       fx.beginPath();fx.moveTo(sx+dx+80,sy+dy+(dy<0?48:0));fx.lineTo(sx,sy);fx.stroke();fx.fillStyle=fx.strokeStyle;fx.beginPath();fx.arc(sx,sy,7,0,7);fx.fill();
+       glow(fx,sx,sy,40,fx.strokeStyle,.6*w_);fx.restore()}});
+   reveal('d2t','統計の<span class="hl">“本格”</span>を、<br>ワンクリックで。',t,36.2,{stagger:.035,out:43.4});
+   const ca=win(t,40.2,43.4,.3,.4);show($('code'),ca*.9);
+   const sp=eOut(prog(t,41.0,41.5));$('strike').style.width=($('codeTxt').offsetWidth+12)*sp+'px';
+   $('codeTxt').style.opacity=1-sp*.55;
+   const na=win(t,41.5,43.4,.3,.4);show($('noCode'),na,`translateX(${(1-eBack(prog(t,41.5,42)))*50}px)`)}
+
+  // ---------- S7 MONTAGE 44-52
+  {const a=win(t,43.8,51.6,.4,.5);
+   if(a>0){drawStars(t,a*.6);drawBubbles(t,a*.5,5,18)}
+   reveal('m1','1つのデータから、<span class="cy">7つの視点</span>。',t,44.6,{stagger:.04,out:51.4});
+   // final grid positions: row1 4 cards, row2 3 cards
+   const gw=430,gh=270,gap=26;
+   CARDS.forEach((_,i)=>{const el=$('k'+i);
+     const row=i<4?0:1, col=i<4?i:i-4, n=row?3:4;
+     const fxp=CX-(n*gw+(n-1)*gap)/2+col*(gw+gap), fyp=250+row*(gh+gap+30);
+     // carousel phase 44-47.6 then settle to grid
+     const ang=(i/7)*Math.PI*2 + (t-44)*0.9;
+     const rx_=CX-280+Math.sin(ang)*760, rz=Math.cos(ang);
+     const cy_=CY-175+60;
+     const st=eIO(prog(t,47.4+i*.06,48.8+i*.06));
+     const xx=lerp(rx_,fxp,st), yy=lerp(cy_,fyp,st);
+     const sc=lerp(.62+.38*(rz+1)/2,gw/560,st);
+     const ry=lerp(-Math.sin(ang)*40,0,st);
+     const entry=eOut(prog(t,44+i*.12,44.8+i*.12));
+     const o=a*entry*lerp(.35+.65*(rz+1)/2,1,st);
+     show(el,o,`translate(${xx}px,${yy+(1-entry)*120}px) perspective(1600px) rotateY(${ry}deg) scale(${sc})`);
+     el.style.transformOrigin='0 0';el.style.zIndex=st>0.5?10:Math.round((rz+1)*10);
+     // spotlight highlight sweep across grid 49.5-51.4
+     const hl=Math.max(0,1-Math.abs((t-49.3)/0.25-i));
+     el.style.boxShadow=`0 40px 90px rgba(0,0,0,.6),0 0 0 ${2+hl*2}px rgba(255,179,71,${hl*.9})`;
+     el.querySelector('.tag').style.opacity=st>.8?1:0})}
+
+  // ---------- S8 VALUES 52-60
+  {const a=win(t,51.8,59.7,.3,.5);
+   if(a>0){drawBubbles(t,a,11,30);drawStars(t,a*.5)}
+   const pos=[[150,190],[990,190],[150,560],[990,560]];
+   ['v1','v2','v3','v4'].forEach((id,i)=>{const t0=52+i*2;const q=eBack(prog(t,t0,t0+.6));const w_=win(t,t0,59.7,.25,.5);
+     // each tile enters big at center then shrinks into grid slot
+     const big=eIO(prog(t,t0+0.75,t0+1.25));
+     const cx_=CX-390, cy_=CY-150;
+     const xx=lerp(cx_,pos[i][0],big), yy=lerp(cy_,pos[i][1],big);
+     const sc=lerp(lerp(.7,1.25,q),1,big);
+     show($(id),w_,`translate(${xx}px,${yy}px) scale(${sc})`,(1-clamp(q*2))>0?`blur(${(1-clamp(q*2))*10}px)`:'');
+     $(id).style.zIndex=10+i;
+     if(t>t0&&t<t0+.5)glow(fx,CX,CY,500,'rgba(255,255,255,.2)',(1-prog(t,t0,t0+.5))*.6)})}
+
+  // ---------- S9 EMOTIONAL 60-68
+  {const a=win(t,60,61.8,.6,.4);
+   $('am').innerHTML=`09<span style="opacity:${(t%1)<.5?1:.25}">:</span>00`;
+   show($('am'),a,`scale(${1+(t-60)*.02})`);show($('amSub'),win(t,60.4,61.8,.5,.4)*.9);
+   glow(bg,CX,450,800,'rgba(255,220,160,.12)',a);
+   const sa=win(t,61.7,65.6,.7,.6);const zs=lerp(1.0,1.06,prog(t,61.7,65.6));
+   show($('screen'),sa,`scale(${zs})`);
+   if(sa>0){glow(bg,960,440,1000,'rgba(92,224,216,.16)',sa);
+     // audience silhouettes
+     cr.save();cr.globalAlpha=sa;const r=rnd(77);
+     for(let row=0;row<2;row++)for(let i=0;i<9;i++){const x=110+i*215+(row?100:0)+r()*30, y=row?1010:900, s=row?1.35:1;
+       const nod=Math.sin((t-62)*3+i)*(t>63.6?3:0);
+       const g=cr.createLinearGradient(0,y-150*s,0,y+200);g.addColorStop(0,row?'#020305':'#0a0d14');g.addColorStop(1,'#000');
+       cr.fillStyle=g;cr.beginPath();cr.ellipse(x,y-110*s+nod,52*s,62*s,0,0,7);cr.fill();
+       cr.beginPath();cr.ellipse(x,y+60*s,120*s,120*s,0,Math.PI,0);cr.fill();cr.fillRect(x-120*s,y+60*s,240*s,300);
+       // rim light from screen
+       cr.strokeStyle='rgba(92,224,216,.18)';cr.lineWidth=2;cr.beginPath();cr.ellipse(x,y-110*s+nod,52*s,62*s,0,Math.PI*1.1,Math.PI*1.9);cr.stroke()}
+     cr.restore()}
+   reveal('q1','“このグラフ、すごく<span class="hl">分かりやすい</span>ね。”',t,63.4,{stagger:.05,out:65.6,outDur:.5});
+   if(t>63.4&&t<66){$('q1').style.textShadow='0 4px 30px rgba(0,0,0,.9)'}
+   const ea=win(t,65.8,68,.4,.15);
+   if(ea>0){drawBubbles(t,ea*.7,21,20);glow(bg,CX,CY,900,'rgba(255,179,71,.12)',ea)}
+   reveal('e3','データが、<span class="hl">あなたの言葉</span>になる。',t,65.9,{stagger:.06,dur:.6,out:67.9,outDur:.1});
+  }
+
+  // ---------- S10 CTA 68-78
+  if(t>=68){const a=1-prog(t,76.4,77.8);
+    drawStars(t,a);drawOrbits(t,a*.85,68,{cy:CY-200,scale:.75});
+    glow(bg,CX,CY-200,900,'rgba(255,179,71,.18)',a);
+    const sw=prog(t,68,69.1);if(sw<1){fx.save();fx.globalAlpha=(1-sw)*.8;fx.strokeStyle='#ffd08a';fx.lineWidth=8*(1-sw)+1;fx.beginPath();fx.arc(CX,CY-200,eOut(sw)*1300,0,7);fx.stroke();fx.restore()}
+    reveal('ct1','あなたのデータは、<span class="hl">もっと語れる</span>。',t,69.6,{stagger:.045,out:73.7,outDur:.3});
+    const ua=eBack(prog(t,71,71.6));show($('url'),prog(t,71,71.3),`scale(${lerp(.7,1,ua)})`);
+    $('url').firstElementChild.style.boxShadow=`0 0 ${40+20*Math.sin(t*4)}px rgba(255,179,71,${.25+.15*Math.sin(t*4)})`;
+    const bs=$('bdg').children;[...bs].forEach((b,i)=>{const q=eOut(prog(t,72+i*.15,72.5+i*.15));b.style.opacity=q;b.style.transform=`translateY(${(1-q)*20}px)`});show($('bdg'),t>72?1:0);
+    reveal('now','今すぐ、ブラウザで。',t,74.0,{stagger:.06,dy:0,blur:16});
+    if(t>74){glow(fx,CX,680,700,'rgba(255,179,71,.25)',(1-prog(t,74,76))*.8)}
+  } else {['ct1','url','bdg','now'].forEach(id=>{$(id).style.display='none'})}
+
+  // global hide out-of-scene DOM for speed
+  if(!(t>=8&&t<17.2))['p1','p2','p3','p4'].forEach(id=>$(id).style.display='none');
+  if(t<27.7||t>35.7)$('br').style.display='none';
+  if(t<35.8||t>43.7){['reg','c1','c2','c3','c4','code','noCode'].forEach(id=>$(id).style.display='none')}
+  if(t<43.8||t>51.7)CARDS.forEach((_,i)=>$('k'+i).style.display='none');
+  if(t<51.8||t>59.8)['v1','v2','v3','v4'].forEach(id=>$(id).style.display='none');
+  if(t<61.7||t>65.7)$('screen').style.display='none';
+
+  // letterbox bars at start / film grain
+  const gr=rnd(Math.floor(t*30));fx.save();fx.globalAlpha=.035;for(let i=0;i<500;i++){fx.fillStyle=gr()<.5?'#fff':'#000';fx.fillRect(gr()*W,gr()*H,2,2)}fx.restore();
+  $('fade').style.opacity=Math.max(1-prog(t,0,.8), prog(t,76.6,78));
+}
+window.render=render;
+window.ready=Promise.all([document.fonts.ready,...[...document.images].map(i=>i.decode().catch(()=>{}))]).then(()=>document.fonts.load('900 40px "Noto Sans JP"','あ'));
+if(location.hash){const t=parseFloat(location.hash.slice(1));window.ready.then(()=>render(t))}
+</script>
+</body></html>
