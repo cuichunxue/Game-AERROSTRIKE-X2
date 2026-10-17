@@ -43,3 +43,13 @@ docs/JOURNEY_MAP.md   プレイヤー・ジャーニーマップ分析
 - テスト：`node tests/game-state.cjs`
 
 記録はブラウザ内（localStorage）にのみ保存されます。音は最初のタップ／キー入力後に始まります。
+
+## ライセンス
+
+© 2026 cuichunxue — [クリエイティブ・コモンズ 表示 - 非営利 - 改変禁止 4.0 国際（CC BY-NC-ND 4.0）](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ja)
+
+- 作者名とライセンスを表示すれば、そのまま共有・再配布できます
+- 営利目的での利用はできません
+- 改変したものを配布することはできません
+
+全文は [`LICENSE`](LICENSE) を参照してください。
